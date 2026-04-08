@@ -1,29 +1,25 @@
 {
   "expo": {
-    "name": "croma-mobile",
+    "name": "CROMA",
     "slug": "croma-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
+      "backgroundColor": "#2B4FE8",
+      "resizeMode": "contain"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
+      "supportsTablet": false,
+      "googleServicesFile": "./google-services.json",
+      "package": "com.croma.mobile"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "ios": {
+      "supportsTablet": false
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4bae24f5-54a7-4b7c-b56e-b96ed3a49031"
+      }
     }
   }
 }

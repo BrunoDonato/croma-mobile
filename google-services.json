@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "319843171517",
+    "project_id": "croma-mobile-8d175",
+    "storage_bucket": "croma-mobile-8d175.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319843171517:android:5aa91f7e624226a3accbd4",
+        "android_client_info": {
+          "package_name": "com.croma.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319843171517-af0shekaq4f1jebqokcfh7pip7in9kjd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.croma.mobile",
+            "certificate_hash": "5524f3a5787cbf4f7705e61d3cede8a0cff6c479"
+          }
+        },
+        {
+          "client_id": "319843171517-9dukbbeqcpleufrmce9aiugn1c1g964c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzFu6LmRT0EN9oGek9uthTv-YEcUapvB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319843171517-9dukbbeqcpleufrmce9aiugn1c1g964c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
