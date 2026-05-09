@@ -2,6 +2,7 @@
   "expo": {
     "name": "CROMA",
     "slug": "croma-mobile",
+    "scheme": "croma-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "splash": {
@@ -14,12 +15,41 @@
       "package": "com.croma.mobile"
     },
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.croma.mobile",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.319843171517-ktnp6hl78cnskbkqifpqgusq60tavm37"
+            ]
+          }
+        ]
+      }
     },
     "extra": {
       "eas": {
         "projectId": "4bae24f5-54a7-4b7c-b56e-b96ed3a49031"
       }
+    },
+    "plugins": [
+      "expo-web-browser",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4bae24f5-54a7-4b7c-b56e-b96ed3a49031"
     }
   }
 }

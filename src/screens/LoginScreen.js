@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   StyleSheet, ActivityIndicator, KeyboardAvoidingView,
@@ -6,15 +6,51 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
-import { loginComGoogle } from '../services/googleAuth';
+import { useGoogleAuth } from '../services/googleAuth';
 
 export default function LoginScreen({ onLoginSucesso }) {
   const { login, loginComGoogle: loginComGoogleContext } = useAuth();
+  const { request, response, promptAsync, redirectUri } = useGoogleAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [carregando, setCarregando] = useState(false);
   const [carregandoGoogle, setCarregandoGoogle] = useState(false);
   const [senhaVisivel, setSenhaVisivel] = useState(false);
+
+  useEffect(() => {
+  if (request) {
+    console.log('request redirectUri:', request.redirectUri);
+  }
+}, [request]);
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const token = response.authentication?.idToken
+        ?? response.authentication?.accessToken
+        ?? response.params?.id_token
+        ?? response.params?.code;
+
+      if (token) {
+        handleGoogleToken(token);
+      } else {
+        Alert.alert('Erro', 'Não foi possível obter o token do Google.');
+      }
+    } else if (response?.type === 'error') {
+      Alert.alert('Erro', response.error?.message || 'Erro no login com Google.');
+    }
+  }, [response]);
+
+  async function handleGoogleToken(token) {
+    setCarregandoGoogle(true);
+    try {
+      await loginComGoogleContext(token);
+      onLoginSucesso();
+    } catch (erro) {
+      Alert.alert('Erro', erro.message || 'Não foi possível fazer login com Google.');
+    } finally {
+      setCarregandoGoogle(false);
+    }
+  }
 
   async function handleLogin() {
     if (!username.trim() || !password.trim()) {
@@ -30,19 +66,6 @@ export default function LoginScreen({ onLoginSucesso }) {
       Alert.alert('Erro', erro.message || 'Não foi possível fazer login.');
     } finally {
       setCarregando(false);
-    }
-  }
-
-  async function handleGoogleLogin() {
-    setCarregandoGoogle(true);
-    try {
-      const idToken = await loginComGoogle();
-      await loginComGoogleContext(idToken);
-      onLoginSucesso();
-    } catch (erro) {
-      Alert.alert('Erro', erro.message || 'Não foi possível fazer login com Google.');
-    } finally {
-      setCarregandoGoogle(false);
     }
   }
 
@@ -112,8 +135,8 @@ export default function LoginScreen({ onLoginSucesso }) {
 
           <TouchableOpacity
             style={[styles.botaoGoogle, carregandoGoogle && styles.botaoDesabilitado]}
-            onPress={handleGoogleLogin}
-            disabled={carregandoGoogle}
+            onPress={() => promptAsync()}
+            disabled={!request || carregandoGoogle}
           >
             {carregandoGoogle
               ? <ActivityIndicator color="#2B4FE8" />

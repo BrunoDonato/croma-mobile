@@ -1,5 +1,9 @@
 import * as SecureStore from 'expo-secure-store';
 
+// Local (desenvolvimento na mesma rede)
+// const BASE_URL = 'http://192.168.0.103:8000';
+
+// Produção (Railway - quando hospedado)
 const BASE_URL = 'https://croma-production.up.railway.app';
 
 const headers = {

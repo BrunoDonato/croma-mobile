@@ -1,29 +1,22 @@
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 
-GoogleSignin.configure({
-  webClientId: '319843171517-9dukbbeqcpleufrmce9aiugn1c1g964c.apps.googleusercontent.com',
-});
+WebBrowser.maybeCompleteAuthSession();
 
-export async function loginComGoogle() {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-    const { idToken } = await GoogleSignin.getTokens();
-    return idToken;
-  } catch (error) {
-    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      throw new Error('Login cancelado.');
-    } else if (error.code === statusCodes.IN_PROGRESS) {
-      throw new Error('Login já em andamento.');
-    } else {
-      throw new Error('Erro ao fazer login com Google.');
-    }
-  }
+const WEB_CLIENT_ID = '319843171517-9dukbbeqcpleufrmce9aiugn1c1g964c.apps.googleusercontent.com';
+const REDIRECT_URI = 'https://auth.expo.io/@brunoamaral77/croma-mobile';
+
+export function useGoogleAuth() {
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    clientId: WEB_CLIENT_ID,
+    redirectUri: REDIRECT_URI,
+    scopes: ['openid', 'profile', 'email'],
+    responseType: 'token',
+  });
+
+  return { request, response, promptAsync };
 }
 
 export async function logoutGoogle() {
-  try {
-    await GoogleSignin.signOut();
-  } catch {
-  }
+  await WebBrowser.coolDownAsync().catch(() => {});
 }
