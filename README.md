@@ -96,4 +96,4 @@ croma-mobile/
 
 ## Autor
 
-Bruno Donato — Projeto acadêmico de Desenvolvimento Mobile
+Bruno Amaral Carvalho Donato — Projeto acadêmico de Desenvolvimento Mobile
