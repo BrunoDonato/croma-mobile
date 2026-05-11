@@ -89,3 +89,11 @@ export async function listarLojas() {
   if (!response.ok) throw new Error('Erro ao buscar lojas.');
   return data;
 }
+
+export async function buscarDashboard() {
+  const headers = await getHeaders();
+  const response = await fetch(`${BASE_URL}/api/dashboard/`, { headers });
+  const data = await response.json();
+  if (!response.ok) throw new Error('Erro ao buscar dashboard.');
+  return data;
+}

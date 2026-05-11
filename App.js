@@ -24,6 +24,8 @@ function OSStack() {
         headerStyle: { backgroundColor: '#2B4FE8' },
         headerTintColor: '#FFF',
         headerTitleStyle: { fontWeight: '600' },
+        headerBackTitleVisible: false,
+        headerBackTitle: ' ',
       }}
     >
       <Stack.Screen name="OSLista" component={OSListScreen} options={{ title: 'Ordens de Serviço' }} />
