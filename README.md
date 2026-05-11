@@ -1,6 +1,6 @@
 # CROMA Mobile
 
-Aplicativo mobile do sistema CROMA — plataforma interna de controle de Ordens de Serviço e Manutenções, desenvolvido para otimizar o trabalho dos técnicos em campo.
+Aplicativo mobile do sistema CROMA - Plataforma interna de controle de Ordens de Serviço e Manutenções, desenvolvido para otimizar o trabalho dos técnicos em campo.
 
 ## Sobre o projeto
 
