@@ -96,27 +96,32 @@ export default function HomeScreen() {
           )}
 
           <View style={styles.kpiGrid}>
-            <KPICard
-              valor={dashboard?.kpi_finalizadas_mes ?? 0}
-              label="Finalizadas no mês"
-              cor="#10B981"
-            />
-            <KPICard
-              valor={dashboard?.kpi_atrasadas ?? 0}
-              label="Em atraso"
-              cor="#EF4444"
-            />
-            <KPICard
-              valor={dashboard?.kpi_execucao ?? 0}
-              label="Em execução"
-              cor="#8B5CF6"
-            />
-            <KPICard
-              valor={dashboard?.kpi_abertas ?? 0}
-              label="Abertas"
-              cor="#2B4FE8"
-            />
-          </View>
+  <KPICard
+    valor={dashboard?.kpi_finalizadas_mes ?? 0}
+    label="Finalizadas no mês"
+    cor="#10B981"
+  />
+  <KPICard
+    valor={dashboard?.kpi_atrasadas ?? 0}
+    label="Em atraso"
+    cor="#EF4444"
+  />
+  <KPICard
+    valor={dashboard?.kpi_execucao ?? 0}
+    label="Em execução"
+    cor="#8B5CF6"
+  />
+  <KPICard
+    valor={dashboard?.kpi_abertas ?? 0}
+    label="Abertas"
+    cor="#2B4FE8"
+  />
+  <KPICard
+    valor={dashboard?.mttr_horas != null ? `${dashboard.mttr_horas}h` : '--'}
+    label="MTTR (mês)"
+    cor="#F59E0B"
+  />
+</View>
 
         </View>
       )}
