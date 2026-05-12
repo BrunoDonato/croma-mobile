@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity,
-  StyleSheet, ActivityIndicator, RefreshControl, Alert
+  StyleSheet, ActivityIndicator, RefreshControl, Alert, TextInput
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { listarOS } from '../services/ordens';
 
 const STATUS_CORES = {
@@ -25,6 +26,7 @@ export default function OSListScreen({ navigation }) {
   const [ordens, setOrdens] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [busca, setBusca] = useState('');
 
   async function carregar() {
     try {
@@ -46,6 +48,16 @@ export default function OSListScreen({ navigation }) {
     const unsubscribe = navigation.addListener('focus', carregar);
     return unsubscribe;
   }, [navigation]);
+
+  const ordensFiltradas = ordens.filter(item => {
+    const termo = busca.toLowerCase();
+    return (
+      String(item.id).includes(termo) ||
+      item.descricao_problema?.toLowerCase().includes(termo) ||
+      item.loja?.nome?.toLowerCase().includes(termo) ||
+      STATUS_LABELS[item.status]?.toLowerCase().includes(termo)
+    );
+  });
 
   function renderItem({ item }) {
     return (
@@ -85,8 +97,20 @@ export default function OSListScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.buscaContainer}>
+        <Ionicons name="search-outline" size={18} color="#888" style={styles.buscaIcone} />
+        <TextInput
+          style={styles.buscaInput}
+          value={busca}
+          onChangeText={setBusca}
+          placeholder="Buscar por ID, descrição, loja..."
+          placeholderTextColor="#B0B0B0"
+          clearButtonMode="while-editing"
+        />
+      </View>
+
       <FlatList
-        data={ordens}
+        data={ordensFiltradas}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         contentContainerStyle={styles.lista}
@@ -99,7 +123,9 @@ export default function OSListScreen({ navigation }) {
         }
         ListEmptyComponent={
           <View style={styles.centro}>
-            <Text style={styles.vazio}>Nenhuma OS encontrada.</Text>
+            <Text style={styles.vazio}>
+              {busca ? 'Nenhuma OS encontrada para essa busca.' : 'Nenhuma OS encontrada.'}
+            </Text>
           </View>
         }
       />
@@ -118,8 +144,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F0F4FF',
   },
+  buscaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    margin: 16,
+    marginBottom: 8,
+    borderRadius: 10,
+    borderWidth: 0.5,
+    borderColor: '#DDE3FF',
+    paddingHorizontal: 12,
+  },
+  buscaIcone: {
+    marginRight: 8,
+  },
+  buscaInput: {
+    flex: 1,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: '#333',
+  },
   lista: {
     padding: 16,
+    paddingTop: 8,
     gap: 12,
   },
   card: {

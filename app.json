@@ -43,7 +43,9 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      "expo-font",
+      "expo-secure-store"
     ],
     "runtimeVersion": {
       "policy": "appVersion"
