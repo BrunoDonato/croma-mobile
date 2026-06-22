@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  StyleSheet, ScrollView, ActivityIndicator, Alert
+  StyleSheet, ScrollView, ActivityIndicator, Alert,
+  KeyboardAvoidingView, Platform
 } from 'react-native';
 import { buscarOS, atualizarOS } from '../services/ordens';
 import { useAuth } from '../context/AuthContext';
@@ -101,106 +102,112 @@ export default function OSEditarScreen({ route, navigation }) {
   const proximosStatus = STATUS_FLOW[os.status] || [];
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.conteudo}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+    >
+      <ScrollView style={styles.container} contentContainerStyle={styles.conteudo}>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitulo}>OS-{os.id} — {os.loja?.nome}</Text>
-        <Text style={styles.cardDescricao}>{os.descricao_problema}</Text>
-      </View>
-
-      {proximosStatus.length > 0 && (
         <View style={styles.card}>
-          <Text style={styles.label}>Alterar status</Text>
-          <View style={styles.statusContainer}>
-            {proximosStatus.map(s => (
-              <TouchableOpacity
-                key={s}
-                style={[
-                  styles.statusBtn,
-                  novoStatus === s && { backgroundColor: STATUS_CORES[s], borderColor: STATUS_CORES[s] }
-                ]}
-                onPress={() => setNovoStatus(novoStatus === s ? null : s)}
-              >
-                <Text style={[
-                  styles.statusBtnTexto,
-                  novoStatus === s && { color: '#FFF' }
-                ]}>
-                  {STATUS_LABELS[s]}
-                </Text>
-              </TouchableOpacity>
-            ))}
+          <Text style={styles.cardTitulo}>OS-{os.id} — {os.loja?.nome}</Text>
+          <Text style={styles.cardDescricao}>{os.descricao_problema}</Text>
+        </View>
+
+        {proximosStatus.length > 0 && (
+          <View style={styles.card}>
+            <Text style={styles.label}>Alterar status</Text>
+            <View style={styles.statusContainer}>
+              {proximosStatus.map(s => (
+                <TouchableOpacity
+                  key={s}
+                  style={[
+                    styles.statusBtn,
+                    novoStatus === s && { backgroundColor: STATUS_CORES[s], borderColor: STATUS_CORES[s] }
+                  ]}
+                  onPress={() => setNovoStatus(novoStatus === s ? null : s)}
+                >
+                  <Text style={[
+                    styles.statusBtnTexto,
+                    novoStatus === s && { color: '#FFF' }
+                  ]}>
+                    {STATUS_LABELS[s]}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
-      )}
+        )}
 
-      {novoStatus === 'FINALIZADA' && (
+        {novoStatus === 'FINALIZADA' && (
+          <View style={styles.card}>
+            <Text style={styles.label}>Solução *</Text>
+            <TextInput
+              style={[styles.input, styles.inputMultilinha]}
+              value={solucao}
+              onChangeText={setSolucao}
+              placeholder="Descreva a solução aplicada..."
+              placeholderTextColor="#B0B0B0"
+              multiline
+              numberOfLines={4}
+            />
+          </View>
+        )}
+
+        {novoStatus === 'CANCELADA' && (
+          <View style={styles.card}>
+            <Text style={styles.label}>Motivo do cancelamento *</Text>
+            <TextInput
+              style={[styles.input, styles.inputMultilinha]}
+              value={motivo}
+              onChangeText={setMotivo}
+              placeholder="Informe o motivo do cancelamento..."
+              placeholderTextColor="#B0B0B0"
+              multiline
+              numberOfLines={4}
+            />
+          </View>
+        )}
+
         <View style={styles.card}>
-          <Text style={styles.label}>Solução *</Text>
+          <Text style={styles.label}>Observações</Text>
           <TextInput
             style={[styles.input, styles.inputMultilinha]}
-            value={solucao}
-            onChangeText={setSolucao}
-            placeholder="Descreva a solução aplicada..."
+            value={observacoes}
+            onChangeText={setObservacoes}
+            placeholder="Adicione observações..."
             placeholderTextColor="#B0B0B0"
             multiline
-            numberOfLines={4}
+            numberOfLines={3}
           />
         </View>
-      )}
 
-      {novoStatus === 'CANCELADA' && (
         <View style={styles.card}>
-          <Text style={styles.label}>Motivo do cancelamento *</Text>
+          <Text style={styles.label}>Registro de andamento</Text>
           <TextInput
             style={[styles.input, styles.inputMultilinha]}
-            value={motivo}
-            onChangeText={setMotivo}
-            placeholder="Informe o motivo do cancelamento..."
+            value={textoAndamento}
+            onChangeText={setTextoAndamento}
+            placeholder="Descreva o que foi feito..."
             placeholderTextColor="#B0B0B0"
             multiline
-            numberOfLines={4}
+            numberOfLines={3}
           />
         </View>
-      )}
 
-      <View style={styles.card}>
-        <Text style={styles.label}>Observações</Text>
-        <TextInput
-          style={[styles.input, styles.inputMultilinha]}
-          value={observacoes}
-          onChangeText={setObservacoes}
-          placeholder="Adicione observações..."
-          placeholderTextColor="#B0B0B0"
-          multiline
-          numberOfLines={3}
-        />
-      </View>
+        <TouchableOpacity
+          style={[styles.botao, salvando && styles.botaoDesabilitado]}
+          onPress={handleSalvar}
+          disabled={salvando}
+        >
+          {salvando
+            ? <ActivityIndicator color="#FFF" />
+            : <Text style={styles.botaoTexto}>Salvar alterações</Text>
+          }
+        </TouchableOpacity>
 
-      <View style={styles.card}>
-        <Text style={styles.label}>Registro de andamento</Text>
-        <TextInput
-          style={[styles.input, styles.inputMultilinha]}
-          value={textoAndamento}
-          onChangeText={setTextoAndamento}
-          placeholder="Descreva o que foi feito..."
-          placeholderTextColor="#B0B0B0"
-          multiline
-          numberOfLines={3}
-        />
-      </View>
-
-      <TouchableOpacity
-        style={[styles.botao, salvando && styles.botaoDesabilitado]}
-        onPress={handleSalvar}
-        disabled={salvando}
-      >
-        {salvando
-          ? <ActivityIndicator color="#FFF" />
-          : <Text style={styles.botaoTexto}>Salvar alterações</Text>
-        }
-      </TouchableOpacity>
-
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
