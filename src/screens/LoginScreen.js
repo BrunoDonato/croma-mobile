@@ -90,7 +90,7 @@ export default function LoginScreen({ onLoginSucesso }) {
               onChangeText={setUsername}
               autoCapitalize="none"
               autoCorrect={false}
-              placeholder="seu.usuario"
+              placeholder="Digite seu nome de usuário"
               placeholderTextColor="#B0B0B0"
             />
           </View>
@@ -127,25 +127,7 @@ export default function LoginScreen({ onLoginSucesso }) {
             }
           </TouchableOpacity>
 
-          <View style={styles.divider}>
-            <View style={styles.dividerLinha} />
-            <Text style={styles.dividerTexto}>ou</Text>
-            <View style={styles.dividerLinha} />
-          </View>
-
-          <TouchableOpacity
-            style={[styles.botaoGoogle, carregandoGoogle && styles.botaoDesabilitado]}
-            onPress={() => promptAsync()}
-            disabled={!request || carregandoGoogle}
-          >
-            {carregandoGoogle
-              ? <ActivityIndicator color="#2B4FE8" />
-              : <>
-                  <Ionicons name="logo-google" size={18} color="#2B4FE8" />
-                  <Text style={styles.botaoGoogleTexto}>Entrar com Google</Text>
-                </>
-            }
-          </TouchableOpacity>
+ 
 
         </View>
 
