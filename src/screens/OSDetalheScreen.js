@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, ActivityIndicator, Alert
+  StyleSheet, ActivityIndicator, Alert, RefreshControl
 } from 'react-native';
 import { buscarOS, deletarOS } from '../services/ordens';
 import { useAuth } from '../context/AuthContext';
@@ -34,6 +34,7 @@ export default function OSDetalheScreen({ route, navigation }) {
   const { usuario } = useAuth();
   const [os, setOs] = useState(null);
   const [carregando, setCarregando] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   async function carregar() {
     try {
@@ -44,6 +45,7 @@ export default function OSDetalheScreen({ route, navigation }) {
       navigation.goBack();
     } finally {
       setCarregando(false);
+      setRefreshing(false);
     }
   }
 
@@ -85,7 +87,17 @@ export default function OSDetalheScreen({ route, navigation }) {
   if (!os) return null;
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.conteudo}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.conteudo}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => { setRefreshing(true); carregar(); }}
+          colors={['#2B4FE8']}
+        />
+      }
+    >
 
       <View style={styles.header}>
         <Text style={styles.titulo}>OS-{os.id}</Text>
